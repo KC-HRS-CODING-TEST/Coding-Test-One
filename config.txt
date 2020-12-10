@@ -43,5 +43,11 @@
 		"check": "<",
 		"change": 5,
 		"over": 7
-	}
+	},
+	{
+		"id": 10,
+		"rule-name": "has [4, 4, 4, 1]",
+		"type": "pattern",
+		"pattern": [4, 4, 4, 1]
+	},
 ];

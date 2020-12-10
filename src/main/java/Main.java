@@ -107,6 +107,7 @@ class Main {
 
             for (Integer value : inputValues) {
                 String ruleType = (String) rule.get("type");
+
                 if (ruleType.equals("comparison")) {
                     doComparisonCheck(value, rule, ruleId, iterator);
                 } else if (ruleType.equals("delta")) {
@@ -116,6 +117,8 @@ class Main {
                     }
 
                     doDeltaCheck(rule, iterator, ruleId, inputValues);
+                } else if (ruleType.equals("pattern")) {
+                    doPatternCheck(rule, inputValues, ruleId, iterator);
                 }
 
                 ++iterator;
@@ -127,11 +130,11 @@ class Main {
         int ruleValue = (int) rule.get("value");
 
         if (rule.get("check").equals(">")  && value > ruleValue) {
-            System.out.println(ruleId + "@" + Integer.toString(iterator));
+            System.out.println(ruleId + "@" + iterator);
         } else if (rule.get("check").equals("<")  && value < ruleValue) {
-            System.out.println(ruleId + "@" + Integer.toString(iterator));
+            System.out.println(ruleId + "@" + iterator);
         } else if(rule.get("check").equals("=") && value.equals(ruleValue)) {
-            System.out.println(ruleId + "@" + Integer.toString(iterator));
+            System.out.println(ruleId + "@" + iterator);
         }
     }
 
@@ -143,11 +146,34 @@ class Main {
         Integer thisDelta = currentNumber - pastNumber;
 
         if (ruleCheck.equals("=") && delta.equals(thisDelta)) {
-            System.out.println(ruleId + "@" + Integer.toString(iterator));
+            System.out.println(ruleId + "@" + iterator);
         } else if (ruleCheck.equals(">") && thisDelta > delta) {
-            System.out.println(ruleId + "@" + Integer.toString(iterator));
+            System.out.println(ruleId + "@" + iterator);
         } else if (ruleCheck.equals("<") && thisDelta < delta) {
-            System.out.println(ruleId + "@" + Integer.toString(iterator));
+            System.out.println(ruleId + "@" + iterator);
+        }
+    }
+
+    public static void doPatternCheck(JSONObject rule, List<Integer> inputValues, String ruleId, int iterator) {
+        Object ruleArray = rule.get("pattern");
+        String pattern = String.valueOf(ruleArray);
+        String[] patternNumbers = pattern.replaceAll("\\[", "").replaceAll("\\]", "").replaceAll("\\s", "").split(",");
+        if (patternNumbers.length + iterator > inputValues.size()) {
+            return;
+        }
+
+        boolean patternMatches = true;
+
+        for (int x = 0; x < patternNumbers.length; x++) {
+            patternMatches = Integer.parseInt(patternNumbers[x]) == inputValues.get(iterator + x);
+
+            if (patternMatches == false) {
+                x = patternNumbers.length;
+            }
+        }
+
+        if (patternMatches == true) {
+            System.out.println(ruleId + "@" + iterator);
         }
     }
 }
