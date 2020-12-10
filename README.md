@@ -1,1 +1,2 @@
 # Coding-Test-One
+Project is based on the spring framework. Can be run with mvn spring-boot:run within the project directory. User will be then prompted for config and csv file config.json and tower1.csv are both stored locally, and can be used for testing, as well as any other file on your machine.
