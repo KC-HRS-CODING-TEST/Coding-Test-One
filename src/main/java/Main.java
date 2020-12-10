@@ -140,16 +140,14 @@ class Main {
 
     public static void doDeltaCheck(JSONObject rule, int iterator, String ruleId, List<Integer> inputValues) {
         String ruleCheck = (String) rule.get("check");
-        Integer delta = (Integer) rule.get("over") - (Integer) rule.get("change");
+        Integer delta = Integer.valueOf((Integer) rule.get("over")).compareTo((Integer) rule.get("change"));
         Integer currentNumber = inputValues.get(iterator);
-        Integer pastNumber = inputValues.get(iterator - 1);
-        Integer thisDelta = currentNumber - pastNumber;
 
-        if (ruleCheck.equals("=") && delta.equals(thisDelta)) {
+        if (ruleCheck.equals("=") && currentNumber.equals(delta)) {
             System.out.println(ruleId + "@" + iterator);
-        } else if (ruleCheck.equals(">") && thisDelta > delta) {
+        } else if (ruleCheck.equals(">") && currentNumber > delta) {
             System.out.println(ruleId + "@" + iterator);
-        } else if (ruleCheck.equals("<") && thisDelta < delta) {
+        } else if (ruleCheck.equals("<") && currentNumber < delta) {
             System.out.println(ruleId + "@" + iterator);
         }
     }
